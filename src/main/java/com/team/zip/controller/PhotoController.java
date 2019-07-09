@@ -1,5 +1,6 @@
 package com.team.zip.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,13 +37,15 @@ public class PhotoController {
 	private CombineService cservice;
 	
 	@RequestMapping("photo/photolist.do")
-	public ModelAndView photo() {
+	public ModelAndView photo(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
 		List<PhotoVO> list = service.getList();
 		List<MemberVO> mlist = mservice.getMemberList();
+		List<PhotoCombineVO> clist = cservice.getReplyData();
 		
 		model.addObject("list",list);
 		model.addObject("mlist",mlist);
+		model.addObject("clist", clist);
 		model.setViewName("/2/photo/list");
 		return model;
 	}
@@ -53,9 +57,8 @@ public class PhotoController {
 	
 	@RequestMapping(value="photo/write.do", method=RequestMethod.POST)
 	public String write(@ModelAttribute PhotoVO pvo, HttpServletRequest request) {
-		
-		
-		
+		System.out.println(request.getParameter("member_no"));
+		service.photoInsert(pvo);
 		return "redirect:photolist.do";
 	}
 	
@@ -68,7 +71,7 @@ public class PhotoController {
 		//데이터 가져오기
 		PhotoVO pvo = service.getData(num);
 		MemberVO mvo = mservice.getData(num);
-		PhotoCombineVO cvo = cservice.getData(num);
+		List<PhotoCombineVO> cvo = cservice.getData(num);
 		
 		model.addAttribute("pvo", pvo);
 		model.addAttribute("mvo", mvo);
@@ -76,5 +79,6 @@ public class PhotoController {
 		
 		return "/2/photo/detail";
 	}
+	
 }
 

@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>     
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +15,6 @@
 <link rel="stylesheet" href="${root}/css/photo/photo_detail.css">
 <link rel="shortcut icon" href="#">
 </head>
-<c:set var="root" value="<%=request.getContextPath() %>"/>
 <body>
 <main id="root" role="main">
 	<div class="card-detail container">
@@ -36,11 +37,13 @@
 							<p>${pvo.photo_content }</p>
 						</figcaption>
 					</figure>
+					
 					<ul class="keyword">
 						<li class="keyword__item">
 							<div class="keyword__item__badge">${pvo.hashtag }</div>
 						</li>
 					</ul>
+					
 				</section>
 				<section class="footer">
 					<div class="footer__stats">
@@ -51,7 +54,7 @@
 						</div>
 						<div class="footer__stats__item">
 							<span>
-							댓글 1
+							댓글 ${fn:length(cvo)}
 							</span>
 						</div>
 					</div>
@@ -60,14 +63,14 @@
 				<div>
 					<section class="comment-feed">
 						<h1 class="comment-feed__header">댓글
-							<span class="comment-feed__header__count">1</span>
+							<span class="comment-feed__header__count">${fn:length(cvo)}</span>
 						</h1>
 						<form class="comment-feed__form">
 							<div class="comment-feed__form__user">
-								<c:if test="${mvo.member_image ne null}">
-									<img src="${root}/image/${mvo.member_image}">
+								<c:if test="${sessionScope.mvo.member_image ne null}">
+									<img src="${root }/image/${sessionScope.mvo.member_image }">
 								</c:if>
-								<c:if test="${mvo.member_image eq null}">
+								<c:if test="${sessionScope.mvo.member_image eq null}">
 	                    			<img src="${root}/image/user.png">
 	                    		</c:if>
 							</div>
@@ -83,20 +86,29 @@
 							</div>
 						</form>
 						<ul class="comment-feed__list">
+							<c:forEach var="cvo" items="${cvo }">
 							<li class="comment-feed__list__item">
 								<article class="comment-feed__item">
 									<p class="comment-feed__item__content">
 										<a class="comment-feed__item__content__author">
+											<c:if test="${cvo.member_image eq null}"> 
+											<img class="comment-feed__item__content__author__image" src="${root }/image/user.png">
+											</c:if>
+											<c:if test="${cvo.member_image ne null}"> 
 											<img class="comment-feed__item__content__author__image" src="${root }/image/${cvo.member_image}">
+											</c:if>
 											<span class="comment-feed__item__content__author__name">${cvo.member_nickname }</span>
 										</a>
-										<span class="comment-feed__item__content__content">${cvo.p_reply_content }</span>
+										<span class="comment-feed__item__content__content">${cvo.p_reply_content }</span>	
 									</p>
 									<footer class="comment-feed__item__footer">
-										<time class="comment-feed__item__footer__time">14시간</time>
+										<time class="comment-feed__item__footer__time">
+										<fmt:formatDate pattern="YYYY-MM-dd" value="${cvo.reg_date }"/> 
+										</time>
 									</footer>
 								</article>
 							</li>
+							</c:forEach>
 						</ul>
 						<ul class="list-paginator">
 							<li>
@@ -121,15 +133,15 @@
 													1
 												</button>
 											</div>
-											<!-- <div>
+											<div>
 												<button class="sidebar__action__btn" type="button">
 													<span class="icon--common-action" style="vertical-align: middle; 
 													margin-right: 8px; background-position: -240px -280px; width: 24px; height: 24px;">
-													<img src="../image/bookmark.png" width="24" height="24">
+													<img src="../image/common/bookmark.png" width="24" height="24">
 													</span>
 													1
 												</button>
-											</div> -->
+											</div>
 										</section>
 										<section class="sidebar__writer writer-info">
 											<div class="writer-profile">

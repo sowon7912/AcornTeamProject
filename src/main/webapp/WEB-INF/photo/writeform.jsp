@@ -10,6 +10,7 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <c:set var="root" value="<%=request.getContextPath() %>"/>
 <link rel="stylesheet" href="${root}/css/photo/photo_write.css">
+<%-- <script type="text/javascript" src="${root }/js/photo/photowrite.js"></script> --%>
 <link rel="shortcut icon" href="#">
 </head>
 <body>
@@ -17,18 +18,18 @@
 		<div class="PhotoWriteForm-logo-wrap">
 			<img class="icon" src="../image/logo.png" onclick="location.href='${root}/main.do'">
 		</div>
-		<form class="Photo-Write-Form container">
+		<form class="Photo-Write-Form container" action="write.do" method="post">
 			<h1 class="Photo-Write-Form_Title">사진 올리기</h1>
 			<div class="Photo-Write-Form_Metadata">
 				<div class="select-input Photo-Write-Form_Metadata_entry">
-					<select class="form-control">
+					<select class="form-control" id="photo_pyeong">
 						<option selected value="">평수</option>
-						<option value="10">10평 이하</option>
-						<option value="20">20평 이하</option>
+						<option value="10평이하">10평이하</option>
+						<option value="20평이하">20평이하</option>
 					</select>
 				</div>
 				<div class="select-input Photo-Write-Form_Metadata_entry">
-					<select class="form-control">
+					<select class="form-control" id="photo_hometype">
 						<option selected value="">주거형태</option>
 						<option value="원룸">원룸</option>
 						<option value="투룸">투룸</option>
@@ -55,26 +56,15 @@
 										</span>
 									</button>
 								</div>
-								<div class="Phot o-Write-Form_photo-item_content">
+								<div class="Photo-Write-Form_photo-item_content">
 									<div class="Photo-Write-Form_photo-item_content_row">
-										<div class="input group select-input">
-											<select class="form-control">
-												<option selected="" value="">공간(필수)</option>
-												<option value="0">원룸</option>
-												<option value="1">거실</option>
-												<option value="2">주방</option>
-												<option value="3">욕실</option>
-											</select>
-										</div>
-									</div>
-									<div class="Photo-Write-Form_photo-item_content_row">
-										<textarea class="form-control text-area-input"
-										placeholder="사진에 대해서 설명해주세요" style="height:110px;"></textarea>
+										<textarea class="form-control text-area-input" id="photo_content"
+										placeholder="사진에 대해서 설명해주세요" style="height:160px;"></textarea>
 									</div>
 									<div class="Photo-Write-Form_photo-item_content_row">
 										<div class="keyword-input">
 											<div class="keyword-input_input-item" style="display:inline-block">
-												<input class="keyword-input_input-item_input" value="" placeholder="해쉬태그" 
+												<input class="keyword-input_input-item_input" id="hashtag" value="" placeholder="해쉬태그" 
 												style="box-sizing: context-box; width: 47px;">
 											</div>
 										</div>
@@ -87,6 +77,7 @@
 			</section>
 			<div class="sticky-container Photo-Write-Form_footer_wrap" style="height:70px;">
 				<div class="sticky-child Photo-Write-Form_footer" style="position: fixed; right:0px; bottom:0px;">
+					<input type="hidden" value="${sessionScope.member_no }" id="member_no">
 					<button class="button button-color-blue Photo-Write-Form_footer_submit" type="submit">올리기</button>
 				</div>
 			</div>

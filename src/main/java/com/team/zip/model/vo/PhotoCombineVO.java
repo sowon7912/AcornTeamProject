@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class PhotoCombineVO {
 	
+	private int p_reply_no;
 	private String p_reply_content;
 	private String member_image;
 	private String member_nickname;
@@ -34,5 +35,11 @@ public class PhotoCombineVO {
 	}
 	public void setReg_date(Timestamp reg_date) {
 		this.reg_date = reg_date;
+	}
+	public int getP_reply_no() {
+		return p_reply_no;
+	}
+	public void setP_reply_no(int p_reply_no) {
+		this.p_reply_no = p_reply_no;
 	}
 }

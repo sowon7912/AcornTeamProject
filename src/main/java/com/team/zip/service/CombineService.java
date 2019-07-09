@@ -1,5 +1,7 @@
 package com.team.zip.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,11 @@ public class CombineService {
 	@Autowired
 	private PhotoCombineDAO dao;
 	
-	public PhotoCombineVO getData(int num) {
+	public List<PhotoCombineVO> getData(int num) {
 		return dao.getData(num);
+	}
+	
+	public List<PhotoCombineVO> getReplyData(){
+		return dao.getReplyData();
 	}
 }

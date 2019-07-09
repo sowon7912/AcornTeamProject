@@ -29,4 +29,24 @@ public class PhotoService {
 		dao.photoUpdateReadcount(num);
 	}
 	
+	public void photoInsert(PhotoVO pvo) {
+		dao.insertPhoto(pvo);
+	}
+	
+	public List<PhotoVO> photoSortByHits(){
+		return dao.photoSortByHits();
+	}
+	
+	public List<PhotoVO> photoSortByNew(){
+		return dao.photoSortByNew();
+	}
+	
+	public List<PhotoVO> photoSortByHomeType(){
+		return dao.photoSortByHomeType();
+	}
+	
+	public List<PhotoVO> photoSortByPyeong(){
+		return dao.photoSortByPyeong();
+	}
+	
 }

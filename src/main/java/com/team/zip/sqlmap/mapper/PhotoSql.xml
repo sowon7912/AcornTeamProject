@@ -1,20 +1,55 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="photo">
+
+	<!-- photoList 게시판 -->
 	<select id="photoDataList" resultType="pvo">
 		select * from photo order by photo_seq_no
 	</select>
 	<select id="photoDetail" resultType="pvo" parameterType="int">
 		select * from photo where photo_seq_no=#{num}
 	</select>
+	<select id="photoReplyData" resultType="cvo">
+		select r.p_reply_content, r.p_reply_no, m.member_nickname, m.member_image 
+		from p_reply r, member m, photo p 
+		where m.member_no=r.member_no and r.p_reply_no = p.photo_seq_no
+	</select>
+	
+	<!-- photoList 정렬 -->
+	<select id="photoSortByHits" resultType="pvo" parameterType="String">
+		select * from photo order by photo_hits desc
+	</select>
+	<select id="photoSortByNew" resultType="pvo" parameterType="String">
+		select * from photo order by reg_date desc
+	</select>
+	<select id="photoSortByHomeType" resultType="pvo" parameterType="String">
+		select * from photo where photo_hometype=#{photo_hometype}
+	</select>
+	<select id="photoSortByPyeong" resultType="pvo" parameterType="String">
+		select * from photo where photo_pyeong=#{photo_pyeong}
+	</select>
+	
+	
+	<!-- photoWrite -->
+	<insert id="insertPhoto" parameterType="pvo">
+		insert into photo values(photo_seq_no.nextval, #{member_no}, #{photo_image}, #{photo_content}, #{photo_hometype}, #{photo_pyeong}, 0, 0, sysdate, ${hashtag})
+	</insert>
+	
+	
 	<update id="photoUpdateReadcount" parameterType="int">
 		update photo set photo_hits=photo_hits+1 where photo_seq_no=#{num}
 	</update>
 	<select id="getMemberData" resultType="mvo" parameterType="int">
 		select * from member where member_no in (select member_no from photo where photo_seq_no=#{num})
 	</select>
+	
+	<!-- photo Detail Page -->
+	<insert id="InsertReply" parameterType="rvo">
+		insert into p_reply values (p_reply_seq_no.nextval, #{member_no}, #{p_reply_content}, sysdate, #{p_reply_no})
+	</insert>
 	<select id="getReplyData" resultType="cvo" parameterType="int">
-		select r.p_reply_content, r.reg_date, m.member_nickname, m.member_image from p_reply r, member m, photo p where p.member_no = m.member_no and p.photo_seq_no=#{num}
+		select r.p_reply_content, r.reg_date, m.member_nickname, m.member_image from p_reply r, member m, photo p 
+		where (r.member_no = m.member_no and r.p_reply_no=p.photo_seq_no) and p.photo_seq_no=#{num}
 	</select>
 	<select id="getReplyCount" resultType="int" parameterType="int">
 		select count(*) from p_reply where member_no in (select member_no from photo where photo_seq_no=#{num})
